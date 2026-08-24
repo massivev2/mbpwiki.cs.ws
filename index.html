@@ -1,0 +1,499 @@
+<html lang="en"><head><link rel="stylesheet" href="https://unpkg.com/kursor/dist/kursor.css">
+<script src="https://unpkg.com/kursor"></script>
+<script>
+    new kursor({
+        type: 4,
+        color: '#00FF00',
+        removeDefaultCursor: true,
+    })
+</script>
+
+
+
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async="" defer="" src="https://buttons.github.io/buttons.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mbp/home</title>
+    <style>
+
+        /* ------------------------------
+           RESET / GLOBALS
+        ------------------------------ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(#0a1a2b, #123);
+            color: #f2f7fa;
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            cursor: pointer;
+        }
+
+        /* ------------------------------
+           SNOW EFFECT
+        ------------------------------ */
+        @keyframes snow {
+            from {
+                transform: translateY(-10vh);
+            }
+            to {
+                transform: translateY(110vh);
+            }
+        }
+
+        .snowflake {
+            position: fixed;
+            top: -10px;
+            color: white;
+            font-size: 12px;
+            opacity: 0.8;
+            pointer-events: none;
+            animation: snow linear infinite;
+        }
+
+        /* ------------------------------
+           SIDEBAR
+        ------------------------------ */
+        .sidebar {
+            width: 220px;
+            background: #142018;
+            border-right: 2px solid #234;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            box-shadow: 4px 0 10px rgba(0, 0, 0, 0.4);
+        }
+
+        .sidebar h2 {
+            margin-bottom: 20px;
+            color: #d74242;
+            font-size: 24px;
+            text-shadow: 0 0 8px #ff4d4d;
+            position: relative;
+        }
+
+        /* little christmas lights */
+        .sidebar h2::after {
+            content: "christmas";
+            font-size: 10px;
+            position: absolute;
+            top: -12px;
+            left: 0;
+            color: gold;
+            letter-spacing: 4px;
+        }
+
+        .sidebar a {
+            padding: 12px 10px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            display: block;
+            transition: background 0.25s, transform 0.2s;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: #244428;
+            transform: translateX(4px);
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.4);
+        }
+
+        /* ------------------------------
+           MAIN CONTENT
+        ------------------------------ */
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: auto;
+        }
+
+        .top-bar {
+            background: #1e2f24;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #2f4836;
+        }
+
+        .top-bar .title {
+            font-weight: bold;
+            font-size: 20px;
+            color: #d74242;
+            text-shadow: 0 0 6px #ff4d4d;
+        }
+
+        /* ------------------------------
+           INPUTS
+        ------------------------------ */
+        .top-bar .inputs {
+            display: flex;
+            gap: 10px;
+        }
+
+        .top-bar input {
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: 1px solid #355;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(4px);
+            color: #f2f7fa;
+            font-size: 14px;
+            width: 180px;
+            transition: border 0.2s, background 0.2s;
+        }
+
+        .top-bar input::placeholder {
+            color: #c8c8c8;
+        }
+
+        .top-bar input:focus {
+            outline: none;
+            border-color: #d74242;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* ------------------------------
+           SECTIONS
+        ------------------------------ */
+        .section {
+            display: none;
+            padding: 20px;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        /* ------------------------------
+           GAME GRID
+        ------------------------------ */
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 20px;
+        }
+
+        .game-card {
+            background: #18251d;
+            border-radius: 12px;
+            overflow: hidden;
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            min-height: 200px;
+            text-align: center;
+            transition: transform 0.25s, box-shadow 0.25s;
+            border: 1px solid #244;
+        }
+
+        .game-card:hover {
+            transform: scale(1.08);
+            box-shadow: 0 12px 24px rgba(255, 0, 0, 0.35);
+        }
+
+        .game-card .game-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #ffdddd;
+            text-shadow: 0 0 4px #ff4d4d;
+        }
+
+        .game-card .game-placeholder {
+            font-size: 12px;
+            color: #b7c7c7;
+        }
+
+        /* ------------------------------
+           BETA POPUP
+        ------------------------------ */
+        #betaPopup {
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%) scale(0.8);
+            background: #244428;
+            color: #f2f7fa;
+            padding: 20px 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: none;
+            text-align: center;
+            font-size: 16px;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+            border: 1px solid #355;
+        }
+
+        #betaPopup.show {
+            display: block;
+            opacity: 1;
+            transform: translateX(-50%) scale(1);
+        }
+
+        /* ------------------------------
+           MOBILE SPACING FIX
+        ------------------------------ */
+        @media (max-width: 700px) {
+            .sidebar a {
+                margin-right: 12px;
+            }
+
+            .sidebar a.tab-link[data-target="library"] {
+                margin-right: 20px;
+            }
+        }
+
+        /* ------------------------------
+           RESPONSIVE
+        ------------------------------ */
+
+        @media (max-width: 900px) {
+            body {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                flex-direction: row;
+                overflow-x: auto;
+                padding: 10px;
+                gap: 10px;
+                border-right: none;
+                border-bottom: 2px solid #234;
+            }
+
+            .sidebar h2 {
+                font-size: 18px;
+                margin-bottom: 0;
+                margin-right: 20px;
+            }
+
+            .sidebar a {
+                margin: 0;
+                padding: 10px 14px;
+                white-space: nowrap;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .top-bar {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+
+            .top-bar .inputs {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .top-bar input {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+
+        @media (max-width: 650px) {
+            .game-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+                gap: 15px;
+            }
+
+            .game-card {
+                padding: 15px;
+                min-height: 150px;
+            }
+
+            .game-card .game-title {
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar {
+                flex-wrap: wrap;
+                justify-content: center;
+                padding: 12px;
+            }
+
+            .sidebar h2 {
+                width: 100%;
+                text-align: center;
+                margin-bottom: 8px;
+            }
+
+            .sidebar a {
+                font-size: 14px;
+                padding: 8px 10px;
+            }
+
+            .top-bar .title {
+                font-size: 18px;
+            }
+
+            .game-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .game-card {
+                min-height: 130px;
+                transform: none !important;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .top-bar input {
+                max-width: 260px;
+            }
+
+            .game-card {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Snowflakes -->
+    <script>
+        for (let i = 0; i < 50; i++) {
+            const snow = document.createElement("div");
+            snow.classList.add("snowflake");
+            snow.innerHTML = "❄";
+            snow.style.left = Math.random() * 100 + "vw";
+            snow.style.animationDuration = 5 + Math.random() * 5 + "s";
+            snow.style.fontSize = 10 + Math.random() * 15 + "px";
+            document.body.appendChild(snow);
+        }
+    </script><div class="snowflake" style="left: 87.4678vw; animation-duration: 5.63241s; font-size: 17.3155px;">❄</div><div class="snowflake" style="left: 56.5303vw; animation-duration: 8.10073s; font-size: 11.5779px;">❄</div><div class="snowflake" style="left: 4.49031vw; animation-duration: 9.81935s; font-size: 23.094px;">❄</div><div class="snowflake" style="left: 68.4121vw; animation-duration: 8.3247s; font-size: 11.2402px;">❄</div><div class="snowflake" style="left: 78.8653vw; animation-duration: 7.91147s; font-size: 18.2135px;">❄</div><div class="snowflake" style="left: 71.0353vw; animation-duration: 7.22977s; font-size: 11.8856px;">❄</div><div class="snowflake" style="left: 93.0149vw; animation-duration: 8.34436s; font-size: 24.6368px;">❄</div><div class="snowflake" style="left: 72.2348vw; animation-duration: 8.91031s; font-size: 12.146px;">❄</div><div class="snowflake" style="left: 46.5878vw; animation-duration: 8.76237s; font-size: 14.8268px;">❄</div><div class="snowflake" style="left: 45.9202vw; animation-duration: 6.68426s; font-size: 22.5572px;">❄</div><div class="snowflake" style="left: 41.5303vw; animation-duration: 8.55413s; font-size: 11.4881px;">❄</div><div class="snowflake" style="left: 58.25vw; animation-duration: 5.27599s; font-size: 10.1864px;">❄</div><div class="snowflake" style="left: 1.95038vw; animation-duration: 6.33263s; font-size: 21.2274px;">❄</div><div class="snowflake" style="left: 9.04661vw; animation-duration: 7.74702s; font-size: 20.6842px;">❄</div><div class="snowflake" style="left: 95.6092vw; animation-duration: 7.30213s; font-size: 14.0037px;">❄</div><div class="snowflake" style="left: 45.663vw; animation-duration: 8.39475s; font-size: 12.2491px;">❄</div><div class="snowflake" style="left: 69.8905vw; animation-duration: 6.01974s; font-size: 22.0251px;">❄</div><div class="snowflake" style="left: 61.5309vw; animation-duration: 5.76493s; font-size: 13.039px;">❄</div><div class="snowflake" style="left: 22.0025vw; animation-duration: 8.79602s; font-size: 23.1597px;">❄</div><div class="snowflake" style="left: 16.387vw; animation-duration: 8.59731s; font-size: 12.2388px;">❄</div><div class="snowflake" style="left: 17.9723vw; animation-duration: 5.53989s; font-size: 22.559px;">❄</div><div class="snowflake" style="left: 17.9484vw; animation-duration: 9.56167s; font-size: 15.8078px;">❄</div><div class="snowflake" style="left: 25.1099vw; animation-duration: 8.97059s; font-size: 21.7911px;">❄</div><div class="snowflake" style="left: 95.667vw; animation-duration: 5.15395s; font-size: 22.7034px;">❄</div><div class="snowflake" style="left: 75.3324vw; animation-duration: 5.85966s; font-size: 24.6178px;">❄</div><div class="snowflake" style="left: 41.7162vw; animation-duration: 8.77344s; font-size: 16.8847px;">❄</div><div class="snowflake" style="left: 38.8036vw; animation-duration: 5.77655s; font-size: 15.5141px;">❄</div><div class="snowflake" style="left: 47.4256vw; animation-duration: 6.15871s; font-size: 15.5931px;">❄</div><div class="snowflake" style="left: 49.5728vw; animation-duration: 9.12197s; font-size: 21.3256px;">❄</div><div class="snowflake" style="left: 96.9443vw; animation-duration: 5.31395s; font-size: 12.4139px;">❄</div><div class="snowflake" style="left: 37.7745vw; animation-duration: 8.86617s; font-size: 12.3895px;">❄</div><div class="snowflake" style="left: 54.5104vw; animation-duration: 7.08625s; font-size: 16.1218px;">❄</div><div class="snowflake" style="left: 21.2869vw; animation-duration: 8.78872s; font-size: 21.7557px;">❄</div><div class="snowflake" style="left: 54.144vw; animation-duration: 9.89786s; font-size: 21.6266px;">❄</div><div class="snowflake" style="left: 87.8826vw; animation-duration: 8.18336s; font-size: 12.2687px;">❄</div><div class="snowflake" style="left: 58.3255vw; animation-duration: 8.80684s; font-size: 10.4627px;">❄</div><div class="snowflake" style="left: 53.7866vw; animation-duration: 7.74762s; font-size: 17.5588px;">❄</div><div class="snowflake" style="left: 63.6909vw; animation-duration: 7.53767s; font-size: 13.3423px;">❄</div><div class="snowflake" style="left: 23.5907vw; animation-duration: 5.06112s; font-size: 15.5142px;">❄</div><div class="snowflake" style="left: 10.2554vw; animation-duration: 9.53518s; font-size: 12.9979px;">❄</div><div class="snowflake" style="left: 35.8043vw; animation-duration: 9.28916s; font-size: 21.2809px;">❄</div><div class="snowflake" style="left: 66.3155vw; animation-duration: 5.34396s; font-size: 19.7905px;">❄</div><div class="snowflake" style="left: 79.9862vw; animation-duration: 7.69999s; font-size: 14.9554px;">❄</div><div class="snowflake" style="left: 62.8518vw; animation-duration: 5.93839s; font-size: 14.2473px;">❄</div><div class="snowflake" style="left: 36.295vw; animation-duration: 5.87114s; font-size: 12.3891px;">❄</div><div class="snowflake" style="left: 69.9078vw; animation-duration: 6.88884s; font-size: 22.3608px;">❄</div><div class="snowflake" style="left: 91.8146vw; animation-duration: 9.06065s; font-size: 19.9824px;">❄</div><div class="snowflake" style="left: 42.7167vw; animation-duration: 9.98401s; font-size: 12.5366px;">❄</div><div class="snowflake" style="left: 23.0069vw; animation-duration: 9.66954s; font-size: 16.0756px;">❄</div><div class="snowflake" style="left: 22.427vw; animation-duration: 7.12744s; font-size: 12.3223px;">❄</div>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>mbp/home</h2>
+        <a class="tab-link active" data-target="library">Library</a>
+        <a id="editorLink">Editor</a>
+
+        <span></span>
+    </div>
+
+    <!-- Main content -->
+    <div class="main">
+        <div class="top-bar">
+            <div class="title">Wiki 🎄</div>
+
+            <div class="inputs">
+                <input type="text" class="search-box" placeholder="Search mbpwiki...">
+                <input type="text" class="code-input" placeholder="Enter code...">
+            </div>
+        </div>
+
+        <!-- Library Section -->
+        <div id="library" class="section active">
+            <div class="game-grid">
+                <a href="https://mbpwiki.ct.ws/astrea.html" class="game-card">
+                    <div class="game-title">Astrea</div>
+                    <div class="game-placeholder">massive • unofficial</div>
+                </a>
+                <a href="https://mbpwiki.ct.ws/nil.html" class="game-card">
+                    <div class="game-title">Under Construction</div>
+                    <div class="game-placeholder">nil • nil</div>
+                </a>
+                <a href="https://mbpwiki.ct.ws/nil.html" class="game-card">
+                    <div class="game-title">Under Construction</div>
+                    <div class="game-placeholder">nil • nil</div>
+                </a>
+                <a href="https://mbpwiki.ct.ws/nil.html" class="game-card">
+                    <div class="game-title">Under Construction</div>
+                    <div class="game-placeholder">nil • nil</div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Beta Popup -->
+    <div id="betaPopup">🎅 Warning: Editor is in BETA! Redirecting in 3 seconds...</div>
+
+    <script>
+        // Tab switching
+        const tabs = document.querySelectorAll('.tab-link[data-target]');
+        const sections = document.querySelectorAll('.section');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                const target = tab.dataset.target;
+                sections.forEach(sec => sec.classList.toggle('active', sec.id === target));
+            });
+        });
+
+        // Search filter
+        const searchBox = document.querySelector('.search-box');
+        const gameCards = document.querySelectorAll('#library .game-card');
+        searchBox.addEventListener('input', () => {
+            const query = searchBox.value.toLowerCase();
+            gameCards.forEach(card => {
+                const title = card.querySelector('.game-title').textContent.toLowerCase();
+                card.style.display = title.includes(query) ? 'flex' : 'none';
+            });
+        });
+
+        // Editor beta popup
+        const editorLink = document.getElementById('editorLink');
+        const betaPopup = document.getElementById('betaPopup');
+        editorLink.addEventListener('click', () => {
+            betaPopup.classList.add('show');
+            setTimeout(() => {
+                betaPopup.classList.remove('show');
+                window.location.href = 'https://mbpwiki.ct.ws/editor.html';
+            }, 3000);
+        });
+
+        // Code input redirect
+        const codeInput = document.querySelector('.code-input');
+        codeInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                const code = codeInput.value.trim();
+                if (code) {
+                    window.location.href = `https://mbpwiki.ct.ws/${encodeURIComponent(code)}.html`;
+                }
+            }
+        });
+
+        // Hide editor button on mobile devices
+        document.addEventListener("DOMContentLoaded", () => {
+            const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
+                .test(navigator.userAgent);
+
+            if (isMobile) {
+                const editorBtn = document.getElementById("editorLink");
+                if (editorBtn) editorBtn.style.display = "none";
+            }
+        });
+    </script>
+
+
+
+
+</body></html>
